@@ -27,11 +27,12 @@ def refresh(request):
         for discipline in discipline_list:
             models.DndDiscipline.objects.get_or_create(name=discipline, element=models.DndElement.objects.get(pk=element), description=f"{discipline.upper()}")
     
-    # Form
-    form_data = json.loads(sheet.get_form_data())
-    for form_name, form_info in form_data:
-        rolls = form_info["rolls"]
-        models.DndForm.objects.get_or_create(name=name, **form_info)
+    # Form, Roll
+    form_data = json.loads(sheet.get_local_values())
+    for form_dict in form_data["forms"]:
+        models.DndForm.objects.get_or_create(**form_dict)
+    for roll_dict in form_data["rolls"]:
+        models.DndRoll.objects.get_or_create(**roll_dict)
 
 
 
