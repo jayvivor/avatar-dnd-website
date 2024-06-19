@@ -109,6 +109,7 @@ COMPONENTS = [
     "Head",
     "Limb",
     "Digit",
+    "Mind",
 ]
 
 ELEMENTS = DISCIPLINE_DICT.keys()
