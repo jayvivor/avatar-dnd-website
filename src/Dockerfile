@@ -1,6 +1,8 @@
 # Use an official Python runtime as the base image
 FROM python:3.10
 
+RUN apt install npm
+
 RUN useradd -rm -d /app -s /bin/bash appuser
 USER appuser
 

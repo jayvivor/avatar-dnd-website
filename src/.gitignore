@@ -3,3 +3,5 @@
 venv
 full_db_reset
 */migrations
+node_modules
+package*.json
