@@ -1,0 +1,58 @@
+{% extends "home/navbar.html" %}
+{% load static %}
+{% block content %}
+    <main class="container my-4">
+        <section class="spell-filters text-center">
+            <h1>Spells</h1>
+            <div class="btn-group my-3" role="group">
+                <button type="button" class="btn btn-secondary active">All Classes</button>
+                {% for class in class_list %}
+                <button type="button" class="btn btn-secondary">{{ class.name }}</button>
+                {% endfor %}
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <input type="text" class="form-control" placeholder="Search Spell Names">
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select">
+                        <option selected>Select Spell Levels</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" placeholder="Healing, Utility, etc.">
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select">
+                        <option selected>Select Casting Times</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+        <section class="spell-list">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Element</th>
+                        <th>Discipline</th>
+                        <th>Duration</th>
+                        <th>Saving Throw</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for form in form_list %}
+                    <tr>
+                        <td>{{ form.name }}</td>
+                        <td>{{ form.element }}</td>
+                        <td>{{ form.discipline }}</td>
+                        <td>{{ form.duration }}</td>
+                        <!-- <td>{{ form.range }}</td> -->
+                        <td>{{ form.saving_throws }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+{% endblock content %}

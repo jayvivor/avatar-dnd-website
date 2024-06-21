@@ -13,15 +13,27 @@ from django.db.models import ManyToManyField
 
 
 def index(request):
-    return HttpResponse("This page is in progress, BITCH")
+    context = {
+        "title": "All Forms",
+        "form_list": models.DndForm.objects.all(),
+        "class_list": models.DndClass.objects.all(),
+    }
+    return render(request, "forms/form_list.html", context=context)
 
 def info(request, dnd_form_name):
     # form_info = DndForm.objects.get(pk=dnd_form_name)
-
+    
     return HttpResponse(f"This is the form description for {dnd_form_name}.")
 
 def refresh(request):
+    """_summary_
 
+    Args:
+        request (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     # Class, Ability, Damage Type, Element, Mastery Level
     for c, name_list in models.edition_definition_dict.items():
         for name in name_list:

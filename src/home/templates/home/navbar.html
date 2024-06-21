@@ -1,0 +1,48 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{% static 'home/bootstrap-5.3.3-dist/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'home/style.css' %}">
+</head>
+<body>
+    <header class="bg-dark text-white py-3">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-dark">
+                <a class="navbar-brand" href="#">Avatar DnD</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link" href="#">Collections</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Game Rules</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Sources</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Tools</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Media</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Forums</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">New Player Guide</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Subscribe</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Marketplace</a></li>
+                    </ul>
+                    <div class="d-flex">
+                        <button class="btn btn-outline-light me-2">Sign In</button>
+                        <button class="btn btn-outline-light">Register</button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    {% block content %}
+    {% endblock content %}
+    <footer class="bg-dark text-white py-3 text-center">
+        <div class="container">
+            <p>&copy; 2024 Avatar DnD. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
