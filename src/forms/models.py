@@ -55,12 +55,6 @@ MASTERY_LEVELS = [
     "N/A"
 ]
 
-CASTING_SPEEDS = [
-    "Action",
-    "Reaction",
-    "Bonus",
-]
-
 DND_CLASSES =  [
     "Barbarian",
     "Bard",
@@ -82,7 +76,28 @@ DND_ABILITIES = [
     "Constitution",
     "Intelligence",
     "Wisdom",
-    "Charisma"
+    "Charisma",
+]
+
+DND_SKILLS = [
+    "Acrobatics",
+    "Animal Handling",
+    "Arcana",
+    "Athletics",
+    "Deception",
+    "History",
+    "Insight",
+    "Intimidation",
+    "Investigation",
+    "Medicine",
+    "Nature",
+    "Perception",
+    "Performance",
+    "Persuasion",
+    "Religion",
+    "Sleight of Hand",
+    "Stealth",
+    "Survival"
 ]
 
 DND_DAMAGE_TYPES = [
@@ -112,15 +127,26 @@ COMPONENTS = [
     "Mind",
 ]
 
+COMBAT_DEFENSES = [
+    "Melee",
+    "Ranged",
+]
+
 ELEMENTS = DISCIPLINE_DICT.keys()
 DISCIPLINES = [disc for discipline_list in DISCIPLINE_DICT.values() for disc in discipline_list]
 
 class BaseModel(models.Model):
-    date_created = models.DateTimeField(default=timezone.now)
+    date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True
+
+class DndCombatDefense(BaseModel):
+    name = models.CharField(max_length=20, primary_key=True)
+
+    def __str__(self):
+        return f"{self.name}"
 
 class DndClass(BaseModel):
     name = models.CharField(max_length=20, primary_key=True)
@@ -128,11 +154,11 @@ class DndClass(BaseModel):
     def __str__(self):
         return f"{self.name}"
 
-class DndAbility(BaseModel):
-    name = models.CharField(max_length=20, primary_key=True)
+class DndAbility(DndCombatDefense):
+    pass
 
-    def __str__(self):
-        return f"{self.name}"
+class DndSkill(DndCombatDefense):
+    pass
 
 class DndMasteryLevel(BaseModel):
     name = models.CharField(max_length=20, primary_key=True)
@@ -173,14 +199,17 @@ class DndDiscipline(BaseModel):
     element = models.ForeignKey(DndElement, on_delete=models.CASCADE)
     description = models.TextField()
 
+    class Meta:
+        unique_together = ('name', 'element')
+
     def __str__(self):
         return f"{self.name} ({self.element})"
 
 class DndForm(BaseModel):
-    name = models.CharField(max_length=200, primary_key=True)
+    name = models.CharField(max_length=200)
     element = models.ForeignKey(DndElement, on_delete=models.CASCADE)
-    discipline = models.ForeignKey(DndDiscipline, on_delete=models.CASCADE)
-    mastery = models.ManyToManyField(DndMasteryLevel)
+    discipline = models.ManyToManyField(DndDiscipline)
+    mastery = models.ForeignKey(DndMasteryLevel, on_delete=models.CASCADE)
     description = models.TextField()
     has_higher_level_bonus = models.BooleanField()
     higher_levels = models.TextField(blank=True)
@@ -188,12 +217,12 @@ class DndForm(BaseModel):
     target = models.CharField(max_length=20)
     casting_speed = models.ManyToManyField(DndCastingSpeed)
     duration = models.CharField(max_length=20)
-    range = models.CharField(max_length=30)
-    components = models.ManyToManyField(DndComponent)
-    saving_throw = models.ForeignKey(DndAbility, on_delete=models.CASCADE)
+    # range = models.CharField(max_length=30)
+    # components = models.ManyToManyField(DndComponent)
+    saving_throws = models.ManyToManyField(DndCombatDefense)
     classes = models.ManyToManyField(DndClass)
     costs_slot = models.BooleanField()
-    special_reqs = models.TextField()
+    special_reqs = models.TextField(blank=True, null=True)
 
 
     def __str__(self):
@@ -215,6 +244,7 @@ edition_definition_dict = {
     DndElement: ELEMENTS,
     DndMasteryLevel: MASTERY_LEVELS,
     DndDamageType: DND_DAMAGE_TYPES,
-    DndCastingSpeed: CASTING_SPEEDS,
     DndComponent: COMPONENTS,
+    DndCombatDefense: COMBAT_DEFENSES,
+    DndSkill: DND_SKILLS,
 }
