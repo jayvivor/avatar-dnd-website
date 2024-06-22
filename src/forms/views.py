@@ -2,22 +2,48 @@ from django.shortcuts import render
 
 # Create your views here.
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 import json
 from . import sheet
-from . import models, utils
+from . import models
+from commonutils import utils
 
 from django.core import serializers
 from django.core.serializers.base import DeserializationError
 from django.db.models import ManyToManyField
-
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.template.loader import render_to_string
 
 def index(request):
+    
+    paginator = Paginator(sorted(models.DndForm.objects.all(), key=lambda obj: obj.name), per_page=10)
+    page_number = request.GET.get("page",1)
+    
+    try:
+        current_form_list_page = paginator.page(page_number)
+    except PageNotAnInteger:
+        current_form_list_page = paginator.page(1)
+    except EmptyPage:
+        current_form_list_page = paginator.page(paginator.num_pages)
+        
+    form_data = serializers.serialize("json", current_form_list_page.object_list)
+
+    current_form_list_page = paginator.page(page_number)
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        print(page_number)
+        data = {
+            'form_list': form_data,
+            'pagination_html': render_to_string('home/pagination.html', {'page_obj': current_form_list_page}, request=request)
+        }
+        return JsonResponse(data)
+    
     context = {
         "title": "All Forms",
-        "form_list": models.DndForm.objects.all(),
+        "form_page": current_form_list_page,
+        "page_obj": current_form_list_page,
         "class_list": models.DndClass.objects.all(),
     }
+    
     return render(request, "forms/form_list.html", context=context)
 
 def info(request, dnd_form_name):
@@ -84,3 +110,5 @@ def refresh(request):
 
 
     return HttpResponse(f"Database has been refreshed.")
+
+# Helpers

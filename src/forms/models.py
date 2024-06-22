@@ -224,7 +224,6 @@ class DndForm(BaseModel):
     costs_slot = models.BooleanField()
     special_reqs = models.TextField(blank=True, null=True)
 
-
     def __str__(self):
         return f"{self.name}"
 

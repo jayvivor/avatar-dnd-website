@@ -19,7 +19,8 @@
 
 from openpyxl import Workbook, load_workbook
 from openpyxl.cell.cell import Cell
-from . import models, utils
+from . import models
+from commonutils import utils
 
 from django.http import JsonResponse
 from django.core.serializers import serialize

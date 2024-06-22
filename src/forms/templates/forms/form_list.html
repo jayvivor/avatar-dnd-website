@@ -1,7 +1,9 @@
 {% extends "home/navbar.html" %}
+
 {% load static %}
+{% load filter %}
+
 {% block content %}
-    <main class="container my-4">
         <section class="spell-filters text-center">
             <h1>Spells</h1>
             <div class="btn-group my-3" role="group">
@@ -40,19 +42,56 @@
                         <th>Saving Throw</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {% for form in form_list %}
-                    <tr>
-                        <td>{{ form.name }}</td>
-                        <td>{{ form.element }}</td>
-                        <td>{{ form.discipline }}</td>
-                        <td>{{ form.duration }}</td>
-                        <!-- <td>{{ form.range }}</td> -->
-                        <td>{{ form.saving_throws }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
+                <div id="table-body">
+                    <tbody>
+                        {% for form in form_page.object_list %}
+                        <tr>
+                            <td>{{ form.name }}</td>
+                            <td>{{ form.element }}</td>
+                            <td>{{ form.discipline.all | nl_listed }}</td>
+                            <td>{{ form.duration }}</td>
+                            <!-- <td>{{ form.range }}</td> -->
+                            <td>{{ form.saving_throws.all | nl_listed }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </div>
             </table>
+
         </section>
-    </main>
+    {% include 'home/pagination.html' %}
+
+    <script src="{% static 'home/jquery-3.7.1.min.js' %}"></script>
+    <script>
+    $(document).ready(function(){
+        $(document).on('click', '.pagination a', function(e){
+            e.preventDefault();
+            var page = $(this).attr('href').split('page=')[1];
+            $.ajax({
+                url: '?page=' + page,
+                success: function(data) {
+                    var form_list = JSON.parse(data.form_list);
+                    var tableBody = '';
+                    for (var i = 0; i < form_list.length; i++) {
+                        tableBody += '<tr> \
+                            <td>' + form_list[i].fields.name + '</td> \
+                            <td>' + form_list[i].fields.element + '</td> \
+                            <td>' + 2 + '</td> \
+                            <td>' + form_list[i].fields.duration + '</td> \
+                            <!-- <td>' + form_list[i].fields.range + '</td> --> \
+                            <td>' + 3 + '</td> \
+                        </tr>'
+            
+            
+                    }
+                    console.log(tableBody)
+                    $('#table-body').html(tableBody);
+
+                    var paginationHtml = $(data.pagination_html);
+                    $('#pagination-container').html(paginationHtml);
+                }
+            });
+        });
+    });
+    </script>
 {% endblock content %}

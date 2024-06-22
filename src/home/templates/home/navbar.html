@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{% static 'home/style.css' %}">
 </head>
 <body>
-    <header class="bg-dark text-white py-3">
+    <header class="bg-dark text-white py-2">
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-dark">
                 <a class="navbar-brand" href="#">Avatar DnD</a>
@@ -36,13 +36,15 @@
             </nav>
         </div>
     </header>
+    <main class="container my-4 dnd-content">
     {% block content %}
     {% endblock content %}
-    <footer class="bg-dark text-white py-3 text-center">
+    </main>
+    <footer class="footer bg-dark text-white py-2 text-center fixed-bottom">
         <div class="container">
-            <p>&copy; 2024 Avatar DnD. All rights reserved.</p>
+            <p>2024 Avatar DnD Homebrew.</p>
         </div>
     </footer>
-    <script src="bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+    <script src={% static "home/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js" %}></script>
 </body>
 </html>
