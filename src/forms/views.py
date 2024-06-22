@@ -28,7 +28,6 @@ def index(request):
         
     form_data = serializers.serialize("json", current_form_list_page.object_list)
 
-    current_form_list_page = paginator.page(page_number)
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         print(page_number)
         data = {

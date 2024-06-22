@@ -42,8 +42,7 @@
                         <th>Saving Throw</th>
                     </tr>
                 </thead>
-                <div id="table-body">
-                    <tbody>
+                    <tbody id="table-body">
                         {% for form in form_page.object_list %}
                         <tr>
                             <td>{{ form.name }}</td>
@@ -84,7 +83,6 @@
             
             
                     }
-                    console.log(tableBody)
                     $('#table-body').html(tableBody);
 
                     var paginationHtml = $(data.pagination_html);
