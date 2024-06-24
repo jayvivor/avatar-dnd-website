@@ -61,6 +61,7 @@
     {% include 'home/pagination.html' %}
 
     <script src="{% static 'home/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'home/utils.js' %}"></script>
     <script>
     $(document).ready(function(){
         $(document).on('click', '.pagination a', function(e){
@@ -72,16 +73,15 @@
                     var form_list = JSON.parse(data.form_list);
                     var tableBody = '';
                     for (var i = 0; i < form_list.length; i++) {
+                        console.log(form_list[i].fields)
                         tableBody += '<tr> \
                             <td>' + form_list[i].fields.name + '</td> \
                             <td>' + form_list[i].fields.element + '</td> \
-                            <td>' + 2 + '</td> \
+                            <td>' + nlListed(form_list[i].fields.discipline) + '</td> \
                             <td>' + form_list[i].fields.duration + '</td> \
                             <!-- <td>' + form_list[i].fields.range + '</td> --> \
-                            <td>' + 3 + '</td> \
+                            <td>' + nlListed(form_list[i].fields.saving_throws) + '</td> \
                         </tr>'
-            
-            
                     }
                     $('#table-body').html(tableBody);
 

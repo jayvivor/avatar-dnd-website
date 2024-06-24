@@ -14,6 +14,15 @@ from django.db.models import ManyToManyField
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.template.loader import render_to_string
 
+# To go in new file
+
+from django.core.serializers.json import Serializer as JSONSerializer
+
+class NameSerializer(JSONSerializer):
+    
+    def handle_field(self, obj, field):
+        super().handle_field(obj, field)
+
 def index(request):
     
     paginator = Paginator(sorted(models.DndForm.objects.all(), key=lambda obj: obj.name), per_page=10)
@@ -26,7 +35,9 @@ def index(request):
     except EmptyPage:
         current_form_list_page = paginator.page(paginator.num_pages)
         
-    form_data = serializers.serialize("json", current_form_list_page.object_list)
+    ns = NameSerializer()
+    form_data = ns.serialize(list(current_form_list_page.object_list)[0:1])
+    return JsonResponse({"data":form_data})
 
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         print(page_number)
@@ -110,4 +121,4 @@ def refresh(request):
 
     return HttpResponse(f"Database has been refreshed.")
 
-# Helpers
+
