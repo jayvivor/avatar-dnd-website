@@ -14,15 +14,6 @@ from django.db.models import ManyToManyField
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.template.loader import render_to_string
 
-# To go in new file
-
-from django.core.serializers.json import Serializer as JSONSerializer
-
-class NameSerializer(JSONSerializer):
-    
-    def handle_field(self, obj, field):
-        super().handle_field(obj, field)
-
 def index(request):
     
     paginator = Paginator(sorted(models.DndForm.objects.all(), key=lambda obj: obj.name), per_page=10)
@@ -34,22 +25,19 @@ def index(request):
         current_form_list_page = paginator.page(1)
     except EmptyPage:
         current_form_list_page = paginator.page(paginator.num_pages)
-        
-    ns = NameSerializer()
-    form_data = ns.serialize(list(current_form_list_page.object_list)[0:1])
-    return JsonResponse({"data":form_data})
+
+    # form_data = serializers.serialize("json", current_form_list_page.object_list)
 
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        print(page_number)
         data = {
-            'form_list': form_data,
-            'pagination_html': render_to_string('home/pagination.html', {'page_obj': current_form_list_page}, request=request)
+            "pagination_table": render_to_string('forms/form_table.html', {'page_obj': current_form_list_page}, request=request),
+            "pagination_bar": render_to_string('home/pagination_bar.html', {'page_obj': current_form_list_page}, request=request)
         }
         return JsonResponse(data)
+        return render(request, 'home/pagination.json', context={}, content_type="application/json")
     
     context = {
         "title": "All Forms",
-        "form_page": current_form_list_page,
         "page_obj": current_form_list_page,
         "class_list": models.DndClass.objects.all(),
     }

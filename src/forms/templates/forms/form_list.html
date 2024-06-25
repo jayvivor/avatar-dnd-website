@@ -43,53 +43,15 @@
                     </tr>
                 </thead>
                     <tbody id="table-body">
-                        {% for form in form_page.object_list %}
-                        <tr>
-                            <td>{{ form.name }}</td>
-                            <td>{{ form.element }}</td>
-                            <td>{{ form.discipline.all | nl_listed }}</td>
-                            <td>{{ form.duration }}</td>
-                            <!-- <td>{{ form.range }}</td> -->
-                            <td>{{ form.saving_throws.all | nl_listed }}</td>
-                        </tr>
-                        {% endfor %}
+                        {% include "forms/form_table.html" %}
                     </tbody>
                 </div>
             </table>
 
         </section>
-    {% include 'home/pagination.html' %}
+    {% include 'home/pagination_bar.html' %}
 
     <script src="{% static 'home/jquery-3.7.1.min.js' %}"></script>
-    <script src="{% static 'home/utils.js' %}"></script>
-    <script>
-    $(document).ready(function(){
-        $(document).on('click', '.pagination a', function(e){
-            e.preventDefault();
-            var page = $(this).attr('href').split('page=')[1];
-            $.ajax({
-                url: '?page=' + page,
-                success: function(data) {
-                    var form_list = JSON.parse(data.form_list);
-                    var tableBody = '';
-                    for (var i = 0; i < form_list.length; i++) {
-                        console.log(form_list[i].fields)
-                        tableBody += '<tr> \
-                            <td>' + form_list[i].fields.name + '</td> \
-                            <td>' + form_list[i].fields.element + '</td> \
-                            <td>' + nlListed(form_list[i].fields.discipline) + '</td> \
-                            <td>' + form_list[i].fields.duration + '</td> \
-                            <!-- <td>' + form_list[i].fields.range + '</td> --> \
-                            <td>' + nlListed(form_list[i].fields.saving_throws) + '</td> \
-                        </tr>'
-                    }
-                    $('#table-body').html(tableBody);
+    <script src="{% static 'home/pagination.js' %}"></script>
 
-                    var paginationHtml = $(data.pagination_html);
-                    $('#pagination-container').html(paginationHtml);
-                }
-            });
-        });
-    });
-    </script>
 {% endblock content %}

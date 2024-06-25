@@ -1,0 +1,12 @@
+{% load filter %}
+
+{% for form in page_obj.object_list %}
+<tr>
+    <td>{{ form.name }}</td>
+    <td>{{ form.element }}</td>
+    <td>{{ form.discipline.all | nl_listed }}</td>
+    <td>{{ form.duration }}</td>
+    <!-- <td>{{ form.range }}</td> -->
+    <td>{{ form.saving_throws.all | nl_listed }}</td>
+</tr>
+{% endfor %}
