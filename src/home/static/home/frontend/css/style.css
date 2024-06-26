@@ -1,11 +1,29 @@
+/* Herculanum for paragraph */
+@font-face {
+    font-family: 'Herc';
+    src: url('../fonts/HerculanumLTProRoman.ttf') format('truetype');
+  }
+  
+  /* Locally-hosted Cardo replacement */
+  @font-face {
+    font-family: 'Atla';
+    src: url('../fonts/Avatar Airbender.ttf') format('truetype');
+  }  
+
+h1 {
+    font-family: 'Herc', sans-serif;
+}
+
 body {
     background-color: #f8f8f8;
     display: flex;
     flex-direction: column;
+    font-family: 'Tajawal', sans-serif;
 }
 
 header .navbar-brand {
     font-size: 1.5rem;
+
 }
 
 header .nav-link {
@@ -23,7 +41,7 @@ main {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.spell-filters .btn-group .btn-secondary.active {
+.dnd-form-filters .btn-group .btn-secondary.active {
     background-color: #5b8cfa;
     color: white;
     border-color: #5b8cfa;
